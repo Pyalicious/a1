@@ -89,16 +89,16 @@ public class CheckinClient {
                 .checkin(new CheckinRequest.Checkin.Builder()
                         .build(new CheckinRequest.Checkin.Build.Builder()
                                 .bootloader(build.bootloader)
-                                .brand(build.brand)
+                                .brand(hasGooglePlayServices ? build.brand : "google")
                                 .clientId("android-google")
-                                .device(build.device)
-                                .fingerprint(build.fingerprint)
-                                .hardware(build.hardware)
-                                .manufacturer(build.manufacturer)
-                                .model(build.model)
+                                .device(hasGooglePlayServices ? build.device : "angler")
+                                .fingerprint(hasGooglePlayServices ? build.fingerprint : "google/angler/angler:6.0.1/MMB29Q/2480792:user/release-keys")
+                                .hardware(hasGooglePlayServices ? build.hardware : "msm8994")
+                                .manufacturer(hasGooglePlayServices ? build.manufacturer : "Huawei")
+                                .model(hasGooglePlayServices ? build.model : "Nexus 6P")
                                 .otaInstalled(false) // TODO?
                                 //.packageVersionCode(Constants.MAX_REFERENCE_VERSION)
-                                .product(build.product)
+                                .product(hasGooglePlayServices ? build.product : "angler")
                                 .radio(build.radio)
                                 .sdkVersion(build.sdk)
                                 .time(build.time / 1000)
@@ -151,8 +151,8 @@ public class CheckinClient {
         }
         if (builder.accountCookie.isEmpty()) builder.accountCookie.add("");
         if (deviceIdent.wifiMac != null) {
-            builder.macAddress(Arrays.asList(deviceIdent.wifiMac))
-                    .macAddressType(Arrays.asList("wifi"));
+            builder.macAddress(Collections.singletonList(deviceIdent.wifiMac))
+                    .macAddressType(Collections.singletonList("wifi"));
         }
         if (checkinInfo.securityToken != 0) {
             builder.securityToken(checkinInfo.securityToken)
